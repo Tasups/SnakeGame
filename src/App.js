@@ -16,6 +16,7 @@ const App = () => {
   const [dir, setDir] = useState([0, -1]);
   const [speed, setSpeed] = useState(null);
   const [gameOver, setGameOver] = useState(false);
+  const [score, setScore] = useState(0);
 
   useInterval(() => gameLoop(), speed);
 
@@ -31,7 +32,6 @@ const App = () => {
     apple.map((_a, i) => Math.floor(Math.random() * (CANVAS_SIZE[i] / SCALE)));
 
   const checkCollision = (piece, snk = snake) => {
-    /*
     if (
       piece[0] * SCALE >= CANVAS_SIZE[0] ||
       piece[0] < 0 ||
@@ -39,7 +39,6 @@ const App = () => {
       piece[1] < 0
     )
       return true;
-    */
       
     for (const segment of snk) {
       if (piece[0] === segment[0] && piece[1] === segment[1]) return true;
@@ -53,6 +52,7 @@ const App = () => {
       while (checkCollision(newApple, newSnake)) {
         newApple = createApple();
       }
+      setScore(score + 1);
       setApple(newApple);
       return true;
     }
@@ -69,6 +69,7 @@ const App = () => {
   };
 
   const startGame = () => {
+    setScore(0);
     setSnake(SNAKE_START);
     setApple(APPLE_START);
     setDir([0, -1]);
@@ -95,7 +96,10 @@ const App = () => {
         height={`${CANVAS_SIZE[1]}px`}
       />
       {gameOver && <div>GAME OVER!</div>}
+      <div>
       <button onClick={startGame}>Start Game</button>
+      <h2>{score}</h2>
+      </div>
     </div>
   );
 };
